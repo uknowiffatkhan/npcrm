@@ -1,0 +1,306 @@
+.status-divider{
+    width: 24%;
+    border:2px solid #e7e7e7;
+    padding: 10px;
+    border-radius: 5px;
+    background: #eee;
+    min-height: 55vh;
+    margin: 0.5rem;
+    position: relative;
+}
+
+.all-list{
+    border:2px solid #e7e7e7;
+    padding: 10px;
+    border-radius: 5px;
+    background: #eee;
+    min-height: 55vh;
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.all-list > div{
+    flex-wrap: wrap;
+}
+
+.lead-card{
+    padding: 10px;
+    box-shadow: 0px 2px 10px -5px #000;
+    border-radius: 5px;
+    position: relative;
+    margin: 10px 10px 20px;
+    background: #fff;
+    min-width: 235px;
+    width: 20%;
+}
+.lead-card2 {
+    padding: 15px;
+    box-shadow: 0px 4px 20px -10px #000;
+    border-radius: 10px;
+    position: relative;
+    margin: 5px 10px 20px;
+    background: white;
+    /*background: linear-gradient(to bottom, #fff, #ccc);  Gradient background from white to gray */
+    color: #000; /* Text color to white */
+    min-width: 276px;
+    width: 23%;
+    overflow: hidden; /* Ensure overflow is hidden for backdrop-filter to work */    
+}
+
+.lead-card2:not(:hover) {
+    backdrop-filter: blur(2px); /* Adjust the blur value as needed */
+    background-clip: padding-box;
+    transition: backdrop-filter 0.3s ease-in-out; /* Apply transition only for backdrop-filter */
+}
+
+/* Hover effect with scale transformation */
+.lead-card2:hover {
+    transform: scale(1.05);
+    box-shadow: 4px 7px #6c6c6c6e;
+    background: #e7e7ff;
+    /* box-shadow: 2px 11px 12px -7px black;
+    border: 1px solid #60606047; */
+}
+
+/* Added a pseudo-element for a decorative triangle on top */
+/* .lead-card2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid #4b6cb7;
+    transform: translateX(-50%);
+} */
+
+
+.status-divider .divider-title{
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 5px 15px;
+    box-shadow: inset 0px -5px 6px -4px #b1b1b1;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+
+.status-divider > div{
+    overflow-y: auto;
+    height: 55vh;
+    width: 104%;
+    padding-right: 8px;
+}
+
+
+.border-New {
+    border-color: var(--c-greenborder);
+    /* box-shadow: 0px 0px 5px -3px #0bab00; */
+    background: var(--c-greenbg);
+}
+
+.badge-New {
+    background: var(--c-green) !important;
+}
+
+.border-New .divider-title{
+    box-shadow: inset 0px -5px 6px -4px var(--c-green);
+}
+
+
+.border-Interested {
+    border-color: var(--c-brownborder);
+    background: var(--c-brownbg);
+}
+
+.badge-Interested {
+    background: var(--c-brown) !important;
+}
+#badge-Interested {
+    background: var(--c-brown) !important;
+}
+.border-Interested .divider-title{
+    box-shadow: inset 0px -5px 6px -4px var(--c-brown);
+}
+
+.border-Site-Visit-Plan {
+    border-color: var(--c-redborder);
+    background: var(--c-redbg);
+}
+
+.badge-Site-Visit-Plan {
+    background: var(--c-red) !important;
+}
+
+.border-Site-Visit-Plan .divider-title{
+    box-shadow: inset 0px -5px 6px -4px var(--c-red);
+}
+
+.border-Site-Visited {
+    border-color: var(--c-darkredborder);
+    background: var(--c-darkredbg);
+}
+
+.badge-Site-Visited {
+    background: var(--c-darkred) !important;
+}
+
+.border-Site-Visited .divider-title{
+    box-shadow: inset 0px -5px 6px -4px var(--c-darkred);
+}
+
+
+.leaddetails .leadtitle{
+    font-size: 0.9rem;
+    font-weight: 700;
+    word-break: break-all;
+}
+
+.leaddetails span{
+    font-size: 0.6rem;
+    font-weight: 500;
+    
+}
+
+.leaddetails p{
+    font-size: 0.6rem;
+    font-weight: 700;
+    margin:0;
+    padding:0;
+}
+
+.status-badge{
+    width: auto;
+    position: absolute;
+    top: -8px;
+    border: 3px solid #eee;
+    border-radius: 10px;
+    padding: 2px 6px;
+    background: #747474;
+}
+
+.action-badge{
+    width: auto;
+    position: absolute;
+    top: -8px;
+    right: 10px;
+    border: 3px solid #eee;
+    border-radius: 10px;
+    padding: 0px 5px;
+    background: #eee;
+    line-height: 1;
+}
+
+.statusactions{
+    margin-right: 5px;
+}
+
+.statusactions ul{
+    list-style: none;
+    margin-top:10px;
+}
+
+.filter-bar span{
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.filter-bar .btn{
+    color: gray;
+    border:1px solid #bbb;
+    border-radius: 0;
+    padding: 5px 10px;
+    line-height: 1;
+}
+
+.filter-bar .btn.checked{
+    background: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+
+
+
+.filter-blk{
+    width: 215px;
+    max-height: 100vh;
+    overflow: auto;
+}
+
+.filter-blk .sticky-btn{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+}
+
+.filter-blk .sticky-btn button{
+    width: 50%;
+    border-radius: 0;
+}
+
+.cpshowdetails .leadtitle {
+    margin-bottom: 10px; /* Adjust the margin-right value as needed */
+    /* border-bottom: 1px solid #000; You can change the color as needed */
+    display: inline-block; /* Ensures that the border only spans the width of the text */
+    padding-bottom: 3px; /* Adjust as needed to control the space between text and line */
+}
+
+.cpshowdetails span {
+    display: inline-block;
+    margin-bottom: 10px; /* Adjust the margin-bottom value as needed for space between spans */
+}
+
+.cpshowdetails span i {
+    font-size: 1.2em; /* Adjust the font size as needed */
+    margin-right: 5px; /* Adjust the margin-right value as needed for space between icon and text */
+}
+
+.cpshowdetails .location-pin-row {
+    display: flex;
+    align-items: center;
+    margin-top: 6px; /* Adjust the margin-top value as needed for space between rows */
+}
+
+.cpshowdetails .location-pin-row span {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px; /* Adjust the margin-right value as needed for space between spans */
+}
+
+#sticky-link-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
+/* Additional styling for the link */
+#sticky-link-container a {
+    display: block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+

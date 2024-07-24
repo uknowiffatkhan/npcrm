@@ -1,0 +1,353 @@
+<?php
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+$baseurl = $_SESSION["baseurl"];
+include_once $_SERVER['DOCUMENT_ROOT'] . $baseurl . "utils/helper.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . $baseurl . "model/leadmodel.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . $baseurl . "model/callmodel.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . $baseurl . "model/quotemodel.php";
+$uid = $_SESSION["UId"];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $lid = $_POST["lid"];
+    $det = getLeadById($lid, $uid);
+
+    $detcnt = $det->num_rows;
+
+    $det = $det->fetch_assoc();
+
+
+    $callog = getCallLogById($lid, $uid);
+    $qcount = getQuoteCountsByLid($lid);
+
+    $assignedsales = getAssignedSalesList($lid);
+    $assignedusers = getAssignedUsersLead($lid);
+    $assignedusers2 = getAssignedUsersLead($lid);
+
+    $visited = getVisitedCounts($lid);
+    $salesassigned = $assignedusers2->num_rows;
+    $samesales = false;
+
+    $asngdusers = getAssignedUsersLead($lid);
+    while ($asnd = $asngdusers->fetch_assoc()) {
+        if ($uid == $asnd["U_Id"]) {
+            ReadNewUpdateLead($lid, $uid);
+            break;
+        }
+    }
+
+    if (isset($_SESSION["openlead"])) {
+        $_SESSION["openlead"] = "";
+    }
+}
+
+
+
+?>
+
+
+<div class="lead-details-blk 2">
+    <div>
+        <input type="hidden" name="detailid"
+            value="<?php echo $detcnt > 0 ? ($det["Ld_Id"] != "" ? $det["Ld_Id"] : "") : "" ?>" />
+        <h4 class="d-grid align-items-center justify-content-between">
+            <div class="mb-1">
+                <?php echo $detcnt > 0 ? $det["Ld_Name"] : "-" ?>
+                <button type="button" id="reloadleaddetails"
+                    value="<?php echo $detcnt > 0 ? ($det["Ld_Id"] != "" ? $det["Ld_Id"] : "") : "" ?>"
+                    class="btn btn-xs btn-transparent"><i class="fas fa-rotate"></i></button>
+            </div>
+            <?php if ($salesassigned > 0) {
+                ?>
+                <div style="font-size:0.8rem">
+                    <i class="fas <?php echo $salesassigned > 1 ? "fa-users" : "fa-user" ?>"></i>&nbsp;
+                    <?php if ($salesassigned > 0) {
+                        $disp = "";
+                        while ($ass = $assignedusers2->fetch_assoc()) {
+                            if ($ass["U_Id"] == $uid) {
+                                if ($ass["U_TypeId"] == 2) {
+                                    $samesales = true;
+                                }
+
+                            }
+                            $disp = $disp . "<span data-toggle='tooltip' data-placement='bottom' title='" . $ass["UType_Name"] . "'>" . $ass["U_DisplayName"] . "</span>, ";
+                            ?>
+
+
+                            <?php
+                        }
+                        echo trim($disp, ', ');
+                    } ?>
+                </div>
+                <?php
+            } ?>
+
+
+
+        </h4>
+        <div class="details-blk">
+            <div class="mb-3">
+                <label><small>Mobile No.</small></label>
+                <div>
+                    <b>
+                        <?php echo $detcnt > 0 ? ($det["Ld_Mobile"] != "" ? $det["Ld_Mobile"] : "-") : "-" ?>
+                    </b>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label><small>Alt. Mobile No.</small></label>
+                <div>
+                    <b>
+                        <?php echo $detcnt > 0 ? ($det["Ld_AltMobile"] != "" ? $det["Ld_AltMobile"] : "-") : "-" ?>
+                    </b>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label><small>Source</small></label>
+                <div>
+                    <b>
+                        <?php echo $detcnt > 0 ? ($det["Sc_Name"] != "" ? $det["Sc_Name"] : "-") : "-" ?>
+                    </b>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label><small>Lead Status</small></label>
+                <div>
+                    <input type="hidden" name="hfleadstatus"
+                        value="<?php echo $detcnt > 0 ? ($det["Ls_Id"] != "" ? $det["Ls_Id"] : "") : "" ?>">
+                    <b>
+                        <?php echo $detcnt > 0 ? ($det["Ls_Name"] != "" ? $det["Ls_Name"] : "-") : "-" ?>
+                    </b>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label><small>Interested In</small></label>
+                <div>
+                    <b>
+                        <?php echo $detcnt > 0 ? ($det["Rt_Name"] != "" ? $det["Rt_Name"] : "-") : "-" ?>
+                    </b>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label><small>Project</small></label>
+                <div>
+                    <b>
+                        <?php echo $detcnt > 0 ? ($det["Pr_Name"] != "" ? $det["Pr_Name"] : "-") : "-" ?>
+                    </b>
+                </div>
+            </div>
+            <div class="more-detail">
+                <div class="details-blk showmorecont">
+                    <div class="mb-3">
+                        <label><small>Location</small></label>
+                        <div>
+                            <b>
+                                <?php echo $detcnt > 0 ? ($det["Ld_Location"] != "" ? $det["Ld_Location"] : "-") : "-" ?>
+                            </b>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label><small>Budget</small></label>
+                        <div>
+                            <b>
+                                <?php echo $detcnt > 0 ? ($det["Bd_Name"] != "" ? $det["Bd_Name"] : "-") : "-" ?>
+                            </b>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label><small>E-Mail</small></label>
+                        <div>
+                            <b>
+                                <?php echo $detcnt > 0 ? ($det["Ld_Email"] != "" ? $det["Ld_Email"] : "-") : "-" ?>
+                            </b>
+                        </div>
+                    </div>
+
+                  
+
+                    <div class="mb-3">
+                        <label><small>Reference</small></label>
+                        <div>
+                            <b>
+                                <?php echo $detcnt > 0 ? ($det["Ld_Reference"] != "" ? $det["Ld_Reference"] : "-") : "-" ?>
+                            </b>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label><small>Lead Date</small></label>
+                        <div>
+                            <b>
+                                <?php echo $detcnt > 0 ? date("d M Y", strtotime($det["Ld_LeadDate"])) : "-" ?> |
+                                <small>
+                                    <?php echo timeago($det["Ld_LeadDate"]) ?> ago
+                                </small>
+                            </b>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label><small>Last Call Date</small></label>
+                        <div>
+                            <b>
+                                <?php echo $detcnt > 0 ? ($det["Ld_LastCallDate"] != "" ? date("d M Y", strtotime($det["Ld_LastCallDate"])) : "-") : "-" ?>
+                                | <small>
+                                    <?php echo $detcnt > 0 ? ($det["Ld_LastCallDate"] != "" ? timeago($det["Ld_LastCallDate"]) . " ago" : "-") : "-" ?>
+                                </small>
+                            </b>
+                        </div>
+                    </div>
+                </div>
+                <span class="showmorelessdetails">Show More</span>
+            </div>
+
+
+        </div>
+        <div class="mb-3">
+            <label><small>Remark</small></label>
+            <div>
+                <b>
+                    <?php echo $detcnt > 0 ? ($det["Ld_Remark"] != "" ? $det["Ld_Remark"] : "-") : "-" ?>
+                </b>
+            </div>
+        </div>
+        <?php
+        $userasgd = false;
+        while ($asdu = $assignedusers->fetch_assoc()) {
+
+            if ($asdu["U_Id"] == $uid) {
+                $userasgd = true;
+                ?>
+                <div class="d-flex flex-wrap">
+                    <button type="button" class="btn btn-sm btn-secondary mr-1 mb-2 btn-reminder">Add Reminder</button>
+                    <button type="button" class="btn btn-sm btn-primary mr-1 mb-2 btn-calllog">Add Activity</button>
+
+                   
+                        <a target="_blank"
+                        href="<?php echo $baseurl ?>v/lead/cp_lead.php?lid=<?php echo $r["Ld_Id"] ? urlencode(encrypt($r["Ld_Id"])) : "" ?>"
+                        class="btn btn-sm mr-1 mb-2 btn-edit"><b>Edit</b></a>
+                   
+
+                    <?php if ($det["Ls_Id"] != 8) {
+                        ?>
+                        <div>
+                            <button type="button" class="btn btn-sm btn-danger" id="btnjunk"
+                                value="<?php echo $det["Ld_Id"] ?>">JUNK</button>
+                        </div>
+                        <?php
+                    } ?>
+
+
+
+                </div>
+                <div class="mt-3 <?php echo $detcnt > 0 ? ($det["Ld_ProjectId"] != "" ? "" : "d-none") : "d-none" ?>">
+                    <button type="button" class="btn btn-sm btn-info btn-projectdetail">Project Details</button>
+                </div>
+                <div class="mt-4">
+                    <div class="">
+
+                        <!-- <div>
+                            <label><small>Lead Status</small></label>
+                            <select class="form-control form-control-sm mr-3" name="leadupdate" <?php echo isset($det) ? "data-selected=" . $det["Ls_Id"] . "" : "" ?>>
+                                <?php include("../dropdowns/leadstatus.php") ?>
+                            </select>
+                        </div> -->
+                        <div>
+                            <label><small>Labels</small></label>
+                            <select class="select2 form-control form-control-sm mr-3" name="labelupdate" multiple <?php echo isset($det) ? "data-selected=" . $det["labelids"] . "" : "" ?>>
+                                <?php $type = "";
+                                include("../dropdowns/label.php") ?>
+                            </select>
+                            <!-- <input class="labels form-control form-control-sm mr-3" name="labelupdate" /> -->
+                            <!-- <script>var labellist = <?php $type = "arr";
+                            trim(include("../dropdowns/label.php"), '"') ?></script> -->
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="w-100">&nbsp;</label>
+                        <button type="button" id="updatelead" class="btn btn-sm btn-primary">Update</button>
+                    </div>
+
+                </div>
+                <?php
+            }
+
+        }
+        if ($userasgd == false) {
+            if ($_SESSION["TypeId"] == 1) {
+                ?>
+                <button type="button" class="btn btn-sm btn-primary mr-1 mb-2 btn-calllog">Add Call Log</button>
+                <?php
+            } else {
+                ?>
+                <div>
+                    <h5><i class="fas fa-exclamation-triangle text-danger"></i> Action Permission Denied</h5>
+                </div>
+                <?php
+            }
+
+        }
+        if (($salesassigned == 1 && $_SESSION["TypeId"] == 2) || ($salesassigned > 1 && $visited == 0 && $_SESSION["TypeId"] == 2 && $samesales == false)) {
+            // if($salesassigned > 0){
+            ?>
+        <!-- <button type="button" id="claimlead" class="btn btn-sm btn-success">Claim Lead</button> -->
+        <?php
+        // }
+        ?>
+        <button type="button" id="claimlead" class="btn btn-sm btn-success">Claim Lead</button>
+        <?php
+        }
+
+        ?>
+
+        <hr />
+        <div>
+            <p>Call Log</p>
+
+            <div>
+                <?php
+                if ($callog->num_rows > 0) {
+                    while ($cl = $callog->fetch_assoc()) {
+                        ?>
+                        <div class="calllogcard">
+                            <input type="hidden" name="hfcallstatus" value="<?php echo $cl["Cs_Type"] ?>" />
+                            <span
+                                class="status-badge badge badge-warning <?php echo $cl["U_Id"] == $_SESSION["UId"] ? "you" : "others" ?>"><?php echo $cl["U_Id"] == $_SESSION["UId"] ? "you" : $cl["U_DisplayName"] ?></span>
+                            <h6>
+                                <div
+                                    class="<?php echo ($cl["Cs_Name"] == "Connected" ? ($cl["Cl_CallType"] == "Incoming" ? "status-New" : "status-New") : ($cl["Cs_Type"] == "Message" ? "status-New" : "text-danger")) ?>">
+                                    <i
+                                        class="<?php echo ($cl["Cs_Name"] == "Connected" ? ($cl["Cl_CallType"] == "Incoming" ? "bx bxs-phone-incoming" : "bx bxs-phone-outgoing") : ($cl["Cs_Type"] == "Message" ? "fas fa-comment-dots" : "bx bxs-phone-off")) ?>"></i>
+                                    <?php echo ($cl["Cs_Name"] != "" ? $cl["Cs_Name"] : "Remark") ?>
+                                </div>
+                                <div>
+                                    <small data-toggle='tooltip' data-placement='bottom' title="Call Date Time"><i
+                                            class="fas fa-clock"></i>&nbsp;
+                                        <?php echo date("d M h:i A", strtotime($cl["Cl_CreatedDate"])) ?>
+                                    </small>
+                                    <?php echo $cl["Rm_Id"] != "" ? "<i class='fas fa-bell' data-toggle='tooltip' data-placement='bottom' data-html='true' title='Reminder <br/>" . date("d M Y h:i A", strtotime($cl["Rm_DateTime"])) . "'></i>" : "" ?>
+                                </div>
+                            </h6>
+                            <div>
+                                <p class="lstatus" style="line-height:1;margin-top:5px;">
+                                    <?php echo $cl["Ls_Name"] ?><small>
+                                        <?php echo $cl["Cl_CallStatus"] == 1 && ($cl["Cl_LeadStatus"] == 2 || $cl["Cl_LeadStatus"] == 3 || $cl["Cl_LeadStatus"] == 4) ? "<br/>" . date("d M Y h:i A", strtotime($cl["Cl_ActionDate"])) : "" ?>
+                                    </small>
+                                </p>
+                                <p class="remark">
+                                    <?php echo $cl["Cl_Remark"] ?>
+                                </p>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+
+            </div>
+        </div>
+    </div>
+</div>

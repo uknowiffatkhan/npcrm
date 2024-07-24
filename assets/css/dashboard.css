@@ -1,0 +1,81 @@
+.row-container{
+    display: flex;
+}
+
+.row-container > div{
+    padding: 15px;
+}
+
+.row-container > div:nth-child(1){
+    width: 53%;
+}
+.row-container > div:nth-child(2){
+    width: 22%;
+}
+.row-container > div:nth-child(3){
+    width: 25%;
+}
+
+.card-body{
+    padding: 3mm !important;
+}
+
+.status-cards{
+    display: flex;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+.status-card{
+   
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.status-cards .card{
+    min-width: 130px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.card-body > label{
+    display: flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.status-cards .fa-circle{
+    font-size: 0.5rem;
+    margin-right: 5px;
+}
+
+.status-cards h1{
+    font-size: 4rem;
+}
+
+.leads-card{
+    margin-top: 30px;
+}
+
+.leads-card .card-body{
+    padding: 3mm;
+}
+
+.leads-card .lead-card{
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.leads-card .lead-card .leadtitle{
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #2d2d2d;
+}
+
+
+
+.calllogs-cards{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top:30px;
+}
