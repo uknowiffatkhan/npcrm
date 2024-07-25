@@ -71,16 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
                     $mail->SMTPAuth = true;
 
-                    // Sender email address and password
-                    // $mail->Username = 'mohd786267@gmail.com';
-                    // $mail->Password = 'upru aksh xylw azti'; // Replace with your Gmail App Password
+                
 
-                    $mail->Username = 'khaniffat230920@gmail.com';
-                    $mail->Password = 'vitz mygp fbht mnlt'; // Replace with your Gmail App Password
+                    $mail->Username = '';
+                    $mail->Password = ''; // Replace with your Gmail App Password
 
-                    // Set 'from' and 'reply-to' addresses
-                    $mail->setFrom('khaniffat230920@gmail.com', 'Iffat');
-                    $mail->addReplyTo('khaniffat230920@gmail.com', 'Iffat');
+             
 
                     // Add recipient
                     $mail->addAddress($_POST['email'], $_POST['name']);
