@@ -131,13 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                          $mail->SMTPAuth = true;
                          $mail->SMTPDebug  = 0;
 
-                         // Sender email address and password
-                         $mail->Username = 'khaniffat230920@gmail.com';
-                         $mail->Password = 'vitz mygp fbht mnlt'; // Replace with your Gmail App Password
-     
-                         // Set 'from' and 'reply-to' addresses
-                         $mail->setFrom('khaniffat230920@gmail.com', 'Iffat');
-                         $mail->addReplyTo('khaniffat230920@gmail.com', 'Iffat');
+        
      
                          // Add recipient
                          $mail->addAddress($_POST['email'], $_POST['name']);
